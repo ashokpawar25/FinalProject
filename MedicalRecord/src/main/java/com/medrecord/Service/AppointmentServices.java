@@ -2,8 +2,9 @@ package com.medrecord.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.aspectj.apache.bcel.generic.RET;
+import com.medrecord.responsedto.GetAllAppointmentResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,9 +64,45 @@ public class AppointmentServices {
 		return new ServiceResponse(true,"Appointment submitted successfully");
 	}
 
-	public List<Appointment> getAllAppointments() {
-		List<Appointment> appointments = appointmentRepositery.findAll();
-		return appointments;
+	public List<GetAllAppointmentResponseDto> getAllAppointments(Integer appointmentId, String doctorUsername, String patientUserName, Boolean status) {
+		List<Appointment> appointments = appointments = appointmentRepositery.findAll();
+		if (appointmentId != null)
+		{
+			appointments = appointments.stream().filter(a -> a.getAppointmentId() == appointmentId).collect(Collectors.toList());
+		}
+		if(doctorUsername != null)
+		{
+			Doctor doctor = doctorRepositery.findByUsername(doctorUsername);
+			appointments = appointments.stream().filter(a -> a.getDoctor() == doctor).collect(Collectors.toList());
+		}
+		if(patientUserName != null)
+		{
+			Patient patient = patientRepositery.findByUsername(patientUserName);
+			appointments = appointments.stream().filter(a -> a.getPatient() == patient).collect(Collectors.toList());
+		}
+		if (status != null)
+		{
+			appointments = appointments.stream()
+					.filter(a -> a.isApproved() == status)
+					.collect(Collectors.toList());
+		}
+
+		return appointments.stream()
+				.map(appointment -> {
+					GetAllAppointmentResponseDto dto = new GetAllAppointmentResponseDto();
+					dto.appointmentId = appointment.getAppointmentId();
+					dto.patientUsername = appointment.getPatient().getUsername();
+					dto.doctorUsername = appointment.getDoctor().getUsername();
+					dto.date = appointment.getDate();
+					dto.time = appointment.getTime();
+					dto.reason = appointment.getReason();
+					dto.notes=appointment.getNotes();
+					dto.requestedDate = appointment.getRequestedDate();
+					dto.lastUpdatedDate  = appointment.getLastUpdatedDate();
+					dto.approved =appointment.isApproved();
+					return dto;
+				})
+				.collect(Collectors.toList());
 	}
 
 	public ServiceResponse approveAppointment(int appointmentID) {
