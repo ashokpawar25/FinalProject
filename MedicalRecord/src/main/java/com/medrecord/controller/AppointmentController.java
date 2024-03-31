@@ -1,16 +1,13 @@
 package com.medrecord.controller;
 
 import java.util.List;
+import java.util.Objects;
 
+import com.medrecord.responsedto.GetAllAppointmentResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.medrecord.Entity.Appointment;
 import com.medrecord.Service.AppointmentServices;
@@ -40,9 +37,10 @@ public class AppointmentController
 	}
 	
 	@GetMapping("/getAllAppointments")
-	public ResponseEntity<List<Appointment>> getAllAppointments()
+	public ResponseEntity<Object> getAllAppointments(@RequestParam(required = false) Integer appointmentId,@RequestParam(required = false)String doctorUsername,@RequestParam(required = false)boolean status,@RequestParam(required = false)String patientUserName)
 	{
-		List<Appointment> appointments = appointmentServices.getAllAppointments();
+		List<GetAllAppointmentResponseDto> appointments = appointmentServices.getAllAppointments(appointmentId,doctorUsername,patientUserName,status);
+		if(appointments.size()==0) return ResponseEntity.ok("No appointments found");
 		return ResponseEntity.ok(appointments);
 	}
 	
