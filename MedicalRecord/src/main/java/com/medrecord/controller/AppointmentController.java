@@ -24,12 +24,12 @@ public class AppointmentController
 	ServiceResponse response;
 	
 	@PostMapping("/requestAppointment")
-	public ResponseEntity<String> RequestAppointmet(@RequestBody CreateAppointmentRequestDto requestDto)
+	public ResponseEntity<String> RequestAppointment(@RequestBody CreateAppointmentRequestDto requestDto)
 	{
 		
 	    response = appointmentServices.addNewAppointment(requestDto);
 		
-		if (response.status == false)
+		if (!response.status)
 		{
 			return new ResponseEntity<String>(response.message,HttpStatus.BAD_REQUEST);
 		}
@@ -37,10 +37,10 @@ public class AppointmentController
 	}
 	
 	@GetMapping("/getAllAppointments")
-	public ResponseEntity<Object> getAllAppointments(@RequestParam(required = false) Integer appointmentId,@RequestParam(required = false)String doctorUsername,@RequestParam(required = false)boolean status,@RequestParam(required = false)String patientUserName)
+	public ResponseEntity<Object> getAllAppointments(@RequestParam(required = false) Integer appointmentId,@RequestParam(required = false)String doctorUsername,@RequestParam(required = false)Boolean status,@RequestParam(required = false)String patientUserName)
 	{
 		List<GetAllAppointmentResponseDto> appointments = appointmentServices.getAllAppointments(appointmentId,doctorUsername,patientUserName,status);
-		if(appointments.size()==0) return ResponseEntity.ok("No appointments found");
+		if(appointments.isEmpty()) return ResponseEntity.ok("No appointments found");
 		return ResponseEntity.ok(appointments);
 	}
 	
@@ -48,7 +48,7 @@ public class AppointmentController
 	public ResponseEntity<String> approveAppointment(@PathVariable ("appointmentId")int appointmentId)
 	{
 		ServiceResponse response = appointmentServices.approveAppointment(appointmentId);
-		if(response.status == false)
+		if(!response.status)
 			return new ResponseEntity<String>(response.message,HttpStatus.NOT_FOUND);
 		return ResponseEntity.ok(response.message);
 	}

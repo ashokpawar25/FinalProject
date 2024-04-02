@@ -28,9 +28,6 @@ public class AppointmentServices {
 	
 	@Autowired
 	AppointmentRepositery appointmentRepositery;
-	
-	@Autowired
-	ServiceResponse response;
 
 	public ServiceResponse addNewAppointment(CreateAppointmentRequestDto requestDto) 
 	{
@@ -65,7 +62,7 @@ public class AppointmentServices {
 	}
 
 	public List<GetAllAppointmentResponseDto> getAllAppointments(Integer appointmentId, String doctorUsername, String patientUserName, Boolean status) {
-		List<Appointment> appointments = appointments = appointmentRepositery.findAll();
+		List<Appointment> appointments = appointmentRepositery.findAll();
 		if (appointmentId != null)
 		{
 			appointments = appointments.stream().filter(a -> a.getAppointmentId() == appointmentId).collect(Collectors.toList());
