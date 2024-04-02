@@ -15,6 +15,7 @@ import com.medrecord.requestdto.CreateAppointmentRequestDto;
 import com.medrecord.responsedto.ServiceResponse;
 
 @RestController
+//@RequestMapping("/patient")
 public class AppointmentController 
 {
 	@Autowired
@@ -23,13 +24,13 @@ public class AppointmentController
 	@Autowired
 	ServiceResponse response;
 	
-	@PostMapping("/requestAppointment")
-	public ResponseEntity<String> RequestAppointment(@RequestBody CreateAppointmentRequestDto requestDto)
+	@PostMapping("/patient/requestAppointment")
+	public ResponseEntity<String> RequestAppointmet(@RequestBody CreateAppointmentRequestDto requestDto)
 	{
-		
+
 	    response = appointmentServices.addNewAppointment(requestDto);
-		
-		if (!response.status)
+
+		if (response.status == false)
 		{
 			return new ResponseEntity<String>(response.message,HttpStatus.BAD_REQUEST);
 		}
