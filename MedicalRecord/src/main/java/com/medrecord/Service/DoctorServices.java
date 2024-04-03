@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.medrecord.requestdto.UpdateDoctorRequestDto;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.medrecord.Entity.Doctor;
@@ -74,7 +75,8 @@ public class DoctorServices
 		doctorRepositery.save(existingDoctor);
 		return "Doctor Profile Updated Successfully";
 	}
-	
+
+	@Transactional
 	public String deleteDoctor(String username)
 	{
 		Doctor ExistingDoctor= doctorRepositery.findByUsername(username);

@@ -14,5 +14,5 @@ public class GetAllAppointmentResponseDto
     public String notes;
     public LocalDate requestedDate;
     public LocalDate lastUpdatedDate;
-    public boolean approved;
+    public String status;
 }

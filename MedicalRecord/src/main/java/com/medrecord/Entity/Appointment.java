@@ -29,7 +29,7 @@ public class Appointment
 	private LocalTime time;
 	private String reason;
 	private String notes;
-	private boolean isApproved;
+	private String status;
 	private LocalDate requestedDate;
 	private LocalDate lastUpdatedDate;
 	
@@ -40,7 +40,7 @@ public class Appointment
 	}
 	
 	public Appointment(int appointmentId, Patient patientId, Doctor doctorId, LocalDate date,LocalTime time, String reason,
-			String notes,boolean isApproved, LocalDate requestedDate, LocalDate lastUpdatedDate) {
+			String notes,String status, LocalDate requestedDate, LocalDate lastUpdatedDate) {
 		super();
 		this.appointmentId = appointmentId;
 		this.patient = patientId;
@@ -49,7 +49,7 @@ public class Appointment
 		this.time = time;
 		this.reason = reason;
 		this.notes = notes;
-		this.isApproved = isApproved;
+		this.status = status;
 		this.requestedDate = requestedDate;
 		this.lastUpdatedDate = lastUpdatedDate;
 	}
@@ -112,12 +112,12 @@ public class Appointment
 	
 	
 
-	public boolean isApproved() {
-		return isApproved;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setApproved(boolean isApproved) {
-		this.isApproved = isApproved;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public LocalDate getRequestedDate() {

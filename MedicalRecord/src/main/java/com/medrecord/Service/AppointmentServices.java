@@ -51,7 +51,7 @@ public class AppointmentServices {
 		appointment.setTime(requestDto.time);
 		appointment.setNotes(requestDto.notes);
 		appointment.setReason(requestDto.reason);
-		appointment.setApproved(false);
+		appointment.setStatus("pending");
 		appointment.setDoctor(doctor);
 		appointment.setPatient(patient);
 		appointment.setRequestedDate(LocalDate.now());
@@ -61,7 +61,7 @@ public class AppointmentServices {
 		return new ServiceResponse(true,"Appointment submitted successfully");
 	}
 
-	public List<GetAllAppointmentResponseDto> getAllAppointments(Integer appointmentId, String doctorUsername, String patientUserName, Boolean status) {
+	public List<GetAllAppointmentResponseDto> getAllAppointments(Integer appointmentId, String doctorUsername, String patientUserName, String status) {
 		List<Appointment> appointments = appointmentRepositery.findAll();
 		if (appointmentId != null)
 		{
@@ -80,7 +80,7 @@ public class AppointmentServices {
 		if (status != null)
 		{
 			appointments = appointments.stream()
-					.filter(a -> a.isApproved() == status)
+					.filter(a -> a.getStatus().equalsIgnoreCase(status))
 					.collect(Collectors.toList());
 		}
 
@@ -96,26 +96,33 @@ public class AppointmentServices {
 					dto.notes=appointment.getNotes();
 					dto.requestedDate = appointment.getRequestedDate();
 					dto.lastUpdatedDate  = appointment.getLastUpdatedDate();
-					dto.approved =appointment.isApproved();
+					dto.status =appointment.getStatus();
 					return dto;
 				})
 				.collect(Collectors.toList());
 	}
 
-	public ServiceResponse approveAppointment(int appointmentID) {
-		
-		Appointment appointment = appointmentRepositery.findByAppointmentId(appointmentID);
+//	public ServiceResponse approveAppointment(int appointmentId) {
+//
+//		Appointment appointment = appointmentRepositery.findByAppointmentId(appointmentId);
+//		if(appointment == null)
+//		{
+//			return new ServiceResponse(false,"Appointment not found");
+//		}
+//		appointment.setStatus("Approved");
+//		appointmentRepositery.save(appointment);
+//		return new ServiceResponse(true,"Appointment is approved");
+//	}
+
+	public ServiceResponse updateAppointmentStatus(int appointmentId,String status)
+	{
+		Appointment appointment = appointmentRepositery.findByAppointmentId(appointmentId);
 		if(appointment == null)
 		{
 			return new ServiceResponse(false,"Appointment not found");
 		}
-		else if (appointment.isApproved())
-		{
-			return new ServiceResponse(false,"Appointment already approved");
-		}
-		appointment.setApproved(true);
+		appointment.setStatus(status);
 		appointmentRepositery.save(appointment);
-		return new ServiceResponse(true,"Appointment is approved");
+		return new ServiceResponse(true,"Appointment updated successfully");
 	}
-
 }

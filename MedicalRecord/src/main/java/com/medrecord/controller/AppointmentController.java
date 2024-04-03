@@ -21,34 +21,36 @@ public class AppointmentController
     @Autowired
     ServiceResponse response;
 
-    @PostMapping("/patient/requestAppointment")
-    public ResponseEntity<String> RequestAppointment(@RequestBody CreateAppointmentRequestDto requestDto)
-    {
+		if (!response.status)
+		{
+			return new ResponseEntity<String>(response.message,HttpStatus.BAD_REQUEST);
+		}
+		return ResponseEntity.ok(response.message);
+	}
+	
+	@GetMapping("/getAllAppointments")
+	public ResponseEntity<Object> getAllAppointments(@RequestParam(required = false) Integer appointmentId,@RequestParam(required = false)String doctorUsername,@RequestParam(required = false)String status,@RequestParam(required = false)String patientUserName)
+	{
+		List<GetAllAppointmentResponseDto> appointments = appointmentServices.getAllAppointments(appointmentId,doctorUsername,patientUserName,status);
+		if(appointments.isEmpty()) return ResponseEntity.ok("No appointments found");
+		return ResponseEntity.ok(appointments);
+	}
+	
+//	@PutMapping("/approveAppointment/{appointmentId}")
+//	public ResponseEntity<String> approveAppointment(@PathVariable ("appointmentId")int appointmentId)
+//	{
+//		ServiceResponse response = appointmentServices.approveAppointment(appointmentId);
+//		if(!response.status)
+//			return new ResponseEntity<String>(response.message,HttpStatus.NOT_FOUND);
+//		return ResponseEntity.ok(response.message);
+//	}
 
-        response = appointmentServices.addNewAppointment(requestDto);
-
-        if (response.status == false)
-        {
-            return new ResponseEntity<String>(response.message,HttpStatus.BAD_REQUEST);
-        }
-        return ResponseEntity.ok(response.message);
-    }
-
-    @GetMapping("/getAllAppointments")
-    public ResponseEntity<Object> getAllAppointments(@RequestParam(required = false) Integer appointmentId,@RequestParam(required = false)String doctorUsername,@RequestParam(required = false)Boolean status,@RequestParam(required = false)String patientUserName)
-    {
-        List<GetAllAppointmentResponseDto> appointments = appointmentServices.getAllAppointments(appointmentId,doctorUsername,patientUserName,status);
-        if(appointments.isEmpty()) return ResponseEntity.ok("No appointments found");
-        return ResponseEntity.ok(appointments);
-    }
-
-    @PutMapping("/approveAppointment/{appointmentId}")
-    public ResponseEntity<String> approveAppointment(@PathVariable ("appointmentId")int appointmentId)
-    {
-        ServiceResponse response = appointmentServices.approveAppointment(appointmentId);
-        if(!response.status)
-            return new ResponseEntity<String>(response.message,HttpStatus.NOT_FOUND);
-        return ResponseEntity.ok(response.message);
-    }
-
+	@PostMapping("/updateAppointmentStatus/{appointmentId}")
+	public ResponseEntity<String> updateAppointmentStatus(@PathVariable("appointmentId")int appointmentId,@RequestParam String status)
+	{
+		ServiceResponse response = appointmentServices.updateAppointmentStatus(appointmentId,status);
+		if(!response.status)
+			return new ResponseEntity<String>(response.message,HttpStatus.NOT_FOUND);
+		return ResponseEntity.ok(response.message);
+	}
 }
