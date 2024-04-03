@@ -1,19 +1,20 @@
 package com.medrecord.controller;
 
-import com.medrecord.Service.AppointmentServices;
-import com.medrecord.requestdto.CreateAppointmentRequestDto;
+import java.util.List;
+
 import com.medrecord.responsedto.GetAllAppointmentResponseDto;
-import com.medrecord.responsedto.ServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.medrecord.Service.AppointmentServices;
+import com.medrecord.requestdto.CreateAppointmentRequestDto;
+import com.medrecord.responsedto.ServiceResponse;
 
 @RestController
-//@RequestMapping("/patient")
-public class AppointmentController {
+public class AppointmentController
+{
     @Autowired
     AppointmentServices appointmentServices;
 
@@ -21,27 +22,32 @@ public class AppointmentController {
     ServiceResponse response;
 
     @PostMapping("/patient/requestAppointment")
-    public ResponseEntity<String> RequestAppointmet(@RequestBody CreateAppointmentRequestDto requestDto) {
+    public ResponseEntity<String> RequestAppointment(@RequestBody CreateAppointmentRequestDto requestDto)
+    {
 
         response = appointmentServices.addNewAppointment(requestDto);
 
-        if (response.status == false) {
-            return new ResponseEntity<String>(response.message, HttpStatus.BAD_REQUEST);
+        if (response.status == false)
+        {
+            return new ResponseEntity<String>(response.message,HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok(response.message);
     }
 
     @GetMapping("/getAllAppointments")
-    public ResponseEntity<Object> getAllAppointments(@RequestParam(required = false) Integer appointmentId, @RequestParam(required = false) String doctorUsername, @RequestParam(required = false) boolean status, @RequestParam(required = false) String patientUserName) {
-        List<GetAllAppointmentResponseDto> appointments = appointmentServices.getAllAppointments(appointmentId, doctorUsername, patientUserName, status);
-        if (appointments.size() == 0) return ResponseEntity.ok("No appointments found");
+    public ResponseEntity<Object> getAllAppointments(@RequestParam(required = false) Integer appointmentId,@RequestParam(required = false)String doctorUsername,@RequestParam(required = false)Boolean status,@RequestParam(required = false)String patientUserName)
+    {
+        List<GetAllAppointmentResponseDto> appointments = appointmentServices.getAllAppointments(appointmentId,doctorUsername,patientUserName,status);
+        if(appointments.isEmpty()) return ResponseEntity.ok("No appointments found");
         return ResponseEntity.ok(appointments);
     }
 
     @PutMapping("/approveAppointment/{appointmentId}")
-    public ResponseEntity<String> approveAppointment(@PathVariable("appointmentId") int appointmentId) {
+    public ResponseEntity<String> approveAppointment(@PathVariable ("appointmentId")int appointmentId)
+    {
         ServiceResponse response = appointmentServices.approveAppointment(appointmentId);
-        if (response.status == false) return new ResponseEntity<String>(response.message, HttpStatus.NOT_FOUND);
+        if(!response.status)
+            return new ResponseEntity<String>(response.message,HttpStatus.NOT_FOUND);
         return ResponseEntity.ok(response.message);
     }
 
