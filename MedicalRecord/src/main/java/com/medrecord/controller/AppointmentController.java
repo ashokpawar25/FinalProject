@@ -1,6 +1,7 @@
 package com.medrecord.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.medrecord.responsedto.GetAllAppointmentResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,18 +9,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.medrecord.Entity.Appointment;
 import com.medrecord.Service.AppointmentServices;
 import com.medrecord.requestdto.CreateAppointmentRequestDto;
 import com.medrecord.responsedto.ServiceResponse;
 
 @RestController
+//@RequestMapping("/patient")
 public class AppointmentController
 {
-    @Autowired
-    AppointmentServices appointmentServices;
+	@Autowired
+	AppointmentServices appointmentServices;
 
-    @Autowired
-    ServiceResponse response;
+	@Autowired
+	ServiceResponse response;
+
+	@PostMapping("/patient/requestAppointment")
+	public ResponseEntity<String> RequestAppointment(@RequestBody CreateAppointmentRequestDto requestDto)
+	{
+
+		response = appointmentServices.addNewAppointment(requestDto);
 
 		if (!response.status)
 		{
@@ -27,7 +36,7 @@ public class AppointmentController
 		}
 		return ResponseEntity.ok(response.message);
 	}
-	
+
 	@GetMapping("/getAllAppointments")
 	public ResponseEntity<Object> getAllAppointments(@RequestParam(required = false) Integer appointmentId,@RequestParam(required = false)String doctorUsername,@RequestParam(required = false)String status,@RequestParam(required = false)String patientUserName)
 	{
@@ -35,7 +44,7 @@ public class AppointmentController
 		if(appointments.isEmpty()) return ResponseEntity.ok("No appointments found");
 		return ResponseEntity.ok(appointments);
 	}
-	
+
 //	@PutMapping("/approveAppointment/{appointmentId}")
 //	public ResponseEntity<String> approveAppointment(@PathVariable ("appointmentId")int appointmentId)
 //	{
