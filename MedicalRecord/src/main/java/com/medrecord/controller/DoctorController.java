@@ -33,21 +33,21 @@ public class DoctorController
 	@Autowired
 	DoctorRepositery doctorRepositery;
 	
-	@GetMapping("/login")
-	public ResponseEntity<?> loginDoctor(@RequestParam String username,@RequestParam String password)
-	{
-		if(username == null || password == null)
-		{
-			return new ResponseEntity<String>("Username And Password Are Required",HttpStatus.BAD_REQUEST);
-		}
-		
-		Doctor existingDoctor = doctorRepositery.findByUsername(username);
-		if(existingDoctor == null || !existingDoctor.getPassword().equals(password))
-		{
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or passwords");
-		}
-		return ResponseEntity.ok(existingDoctor);
-	}
+//	@GetMapping("/login")
+//	public ResponseEntity<?> loginDoctor(@RequestParam String username,@RequestParam String password)
+//	{
+//		if(username == null || password == null)
+//		{
+//			return new ResponseEntity<String>("Username And Password Are Required",HttpStatus.BAD_REQUEST);
+//		}
+//
+//		Doctor existingDoctor = doctorRepositery.findByUsername(username);
+//		if(existingDoctor == null || !existingDoctor.getPassword().equals(password))
+//		{
+//			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or passwords");
+//		}
+//		return ResponseEntity.ok(existingDoctor);
+//	}
 	
 	@GetMapping("/getDoctors")
 	public ResponseEntity<List<Doctor>> getAllDoctors()
@@ -67,7 +67,7 @@ public class DoctorController
 	}
 	
 	@PutMapping("/updateDoctor/{username}")
-	public ResponseEntity<String> updatDoctorData(@PathVariable("username")String username,@RequestBody UpdateDoctorRequestDto requestDto)
+	public ResponseEntity<String> updateDoctorData(@PathVariable("username")String username,@RequestBody UpdateDoctorRequestDto requestDto)
 	{
 		String response = doctorServices.updateDoctor(username, requestDto);
 		if(response == null)
