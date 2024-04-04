@@ -15,6 +15,7 @@ import com.medrecord.requestdto.CreateAppointmentRequestDto;
 import com.medrecord.responsedto.ServiceResponse;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 //@RequestMapping("/patient")
 public class AppointmentController
 {
@@ -41,7 +42,7 @@ public class AppointmentController
 	public ResponseEntity<Object> getAllAppointments(@RequestParam(required = false) Integer appointmentId,@RequestParam(required = false)String doctorUsername,@RequestParam(required = false)String status,@RequestParam(required = false)String patientUserName)
 	{
 		List<GetAllAppointmentResponseDto> appointments = appointmentServices.getAllAppointments(appointmentId,doctorUsername,patientUserName,status);
-		if(appointments.isEmpty()) return ResponseEntity.ok("No appointments found");
+		if(appointments.isEmpty()) return new ResponseEntity<>(response.message,HttpStatus.NOT_FOUND) ;
 		return ResponseEntity.ok(appointments);
 	}
 
@@ -54,7 +55,7 @@ public class AppointmentController
 //		return ResponseEntity.ok(response.message);
 //	}
 
-	@PostMapping("/updateAppointmentStatus/{appointmentId}")
+	@PutMapping("/updateAppointmentStatus/{appointmentId}")
 	public ResponseEntity<String> updateAppointmentStatus(@PathVariable("appointmentId")int appointmentId,@RequestParam String status)
 	{
 		ServiceResponse response = appointmentServices.updateAppointmentStatus(appointmentId,status);
