@@ -66,7 +66,7 @@ public class DoctorServices
 		existingDoctor.setGender(requestDto.gender);
 		existingDoctor.setLicenseNumber(requestDto.licenseNumber);
 		existingDoctor.setMobile(requestDto.mobile);
-		existingDoctor.setPassword(requestDto.password);
+		existingDoctor.setPassword(existingDoctor.getPassword());
 		existingDoctor.setSpecialization(requestDto.specialization);
 		existingDoctor.setCreatedDate(existingDoctor.getCreatedDate());
 		existingDoctor.setLastUpdatedDate(new Date(System.currentTimeMillis()));

@@ -1,10 +1,13 @@
 package com.medrecord.Service;
 
+import java.sql.SQLOutput;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.medrecord.responsedto.GetAllAppointmentResponseDto;
+import com.medrecord.responsedto.PatientListForDoctorResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -124,5 +127,32 @@ public class AppointmentServices {
 		appointment.setStatus(status);
 		appointmentRepositery.save(appointment);
 		return new ServiceResponse(true,"Appointment updated successfully");
+	}
+
+	public List<PatientListForDoctorResponseDto> getPatientList(String doctorUsername)
+	{
+		List<PatientListForDoctorResponseDto> patientList = new ArrayList<>();
+		List<Appointment> allAppointments = appointmentRepositery.findAll().stream()
+				.filter(appointment -> appointment.getDoctor().getUsername().equalsIgnoreCase(doctorUsername)).toList();
+
+		for(Appointment appointment:allAppointments)
+		{
+			if(appointment.getStatus().equalsIgnoreCase("Approved"))
+			{
+				Patient patient = patientRepositery.findByUsername(appointment.getPatient().getUsername());
+				if(patient != null)
+				{
+					PatientListForDoctorResponseDto dto = new PatientListForDoctorResponseDto();
+					dto.patientName = patient.getPatientName();
+					dto.phoneNo = patient.getPhoneNo();
+					dto.gender = patient.getGender();
+					dto.age = patient.getAge();
+					dto.dateOfVisit = appointment.getDate();
+
+					patientList.add(dto);
+				}
+			}
+		}
+		return patientList;
 	}
 }
