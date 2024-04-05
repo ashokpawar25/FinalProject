@@ -137,17 +137,20 @@ public class AppointmentServices {
 
 		for(Appointment appointment:allAppointments)
 		{
-			Patient patient = patientRepositery.findByUsername(appointment.getPatient().getUsername());
-			if(patient != null)
+			if(appointment.getStatus().equalsIgnoreCase("Approved"))
 			{
-				PatientListForDoctorResponseDto dto = new PatientListForDoctorResponseDto();
-				dto.patientName = patient.getPatientName();
-				dto.phoneNo = patient.getPhoneNo();
-				dto.gender = patient.getGender();
-				dto.age = patient.getAge();
-				dto.dateOfVisit = appointment.getDate();
+				Patient patient = patientRepositery.findByUsername(appointment.getPatient().getUsername());
+				if(patient != null)
+				{
+					PatientListForDoctorResponseDto dto = new PatientListForDoctorResponseDto();
+					dto.patientName = patient.getPatientName();
+					dto.phoneNo = patient.getPhoneNo();
+					dto.gender = patient.getGender();
+					dto.age = patient.getAge();
+					dto.dateOfVisit = appointment.getDate();
 
-				patientList.add(dto);
+					patientList.add(dto);
+				}
 			}
 		}
 		return patientList;
