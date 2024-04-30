@@ -2,8 +2,8 @@ package com.medrecord.controller;
 
 import com.medrecord.Entity.Doctor;
 import com.medrecord.Entity.Patient;
-import com.medrecord.dao.DoctorRepositery;
-import com.medrecord.dao.PatientRepositery;
+import com.medrecord.dao.DoctorRepository;
+import com.medrecord.dao.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController
 {
     @Autowired
-    DoctorRepositery doctorRepositery;
+    DoctorRepository doctorRepository;
 
     @Autowired
-    PatientRepositery patientRepositery;
+    PatientRepository patientRepository;
 
 
     @GetMapping("/login")
@@ -28,7 +28,7 @@ public class AuthController
         {
             return new ResponseEntity("Username And Password Are Required", HttpStatus.BAD_REQUEST);
         }
-        Doctor existingDoctor = doctorRepositery.findByUsername(username);
+        Doctor existingDoctor = doctorRepository.findByUsername(username);
         if(existingDoctor != null)
         {
             if(existingDoctor.getPassword().equals(password))
@@ -38,7 +38,7 @@ public class AuthController
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or passwords");
         }
 
-        Patient existingPatient = patientRepositery.findByUsername(username);
+        Patient existingPatient = patientRepository.findByUsername(username);
         if(existingPatient != null)
         {
             if(existingPatient.getPassword().equals(password))

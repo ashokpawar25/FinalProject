@@ -1,31 +1,37 @@
 package com.medrecord.Service;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
+import com.medrecord.Entity.ApproveRequest;
+import com.medrecord.dao.ApproveRequestRepository;
 import com.medrecord.requestdto.UpdateDoctorRequestDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.medrecord.Entity.Doctor;
-import com.medrecord.dao.DoctorRepositery;
+import com.medrecord.dao.DoctorRepository;
 import com.medrecord.requestdto.DoctorRegisterRequestDto;
 
 @Component
 public class DoctorServices 
 {
 	@Autowired
-	DoctorRepositery doctorRepositery;
+	DoctorRepository doctorRepository;
+
+	@Autowired
+	ApproveRequestRepository approveRequestRepository;
 	
 	public List<Doctor> getDoctors() 
 	{
-		List<Doctor> doctors=doctorRepositery.findAll();
+		List<Doctor> doctors= doctorRepository.findAll();
 		return doctors;
 	}
 	
 	public String registerDoctor(DoctorRegisterRequestDto requestDto)
 	{
-		Doctor existingUsername = doctorRepositery.findByUsername(requestDto.username);
+		Doctor existingUsername = doctorRepository.findByUsername(requestDto.username);
 		if(existingUsername!=null)
 		{
 			return null;
@@ -42,17 +48,20 @@ public class DoctorServices
 		doctor.setPassword(requestDto.password);
 		doctor.setSpecialization(requestDto.specialization);
 		doctor.setUsername(requestDto.username);
-		doctor.setRole(requestDto.role);
+		doctor.setRole("doctor");
 		doctor.setCreatedDate(new Date(System.currentTimeMillis()));
 		doctor.setLastUpdatedDate(new Date(System.currentTimeMillis()));
 		
-		doctorRepositery.save(doctor);
+		doctorRepository.save(doctor);
+		ApproveRequest approveRequest = new ApproveRequest(requestDto.username,requestDto.firstName+" "+requestDto.lastName, requestDto.address, requestDto.mobile,
+				requestDto.email, requestDto.gender,"doctor", LocalDate.now(),LocalDate.now());
+		approveRequestRepository.save(approveRequest);
 		return "Doctor Registered Successfully";
 	}
 	
 	public String updateDoctor(String username, UpdateDoctorRequestDto requestDto)
 	{
-		Doctor existingDoctor = doctorRepositery.findByUsername(username);
+		Doctor existingDoctor = doctorRepository.findByUsername(username);
 		if(existingDoctor == null)
 		{
 			return null;
@@ -72,19 +81,19 @@ public class DoctorServices
 		existingDoctor.setLastUpdatedDate(new Date(System.currentTimeMillis()));
 		existingDoctor.setUsername(username);;
 		existingDoctor.setRole(existingDoctor.getRole());
-		doctorRepositery.save(existingDoctor);
+		doctorRepository.save(existingDoctor);
 		return "Doctor Profile Updated Successfully";
 	}
 
 	@Transactional
 	public String deleteDoctor(String username)
 	{
-		Doctor ExistingDoctor= doctorRepositery.findByUsername(username);
+		Doctor ExistingDoctor= doctorRepository.findByUsername(username);
 		if(ExistingDoctor == null)
 		{
 			return null;
 		}
-		doctorRepositery.deleteByUsername(username);
+		doctorRepository.deleteByUsername(username);
 		return "Doctor Data Deleted Successfully";
 	}
 }

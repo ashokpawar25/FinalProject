@@ -23,20 +23,18 @@ public class Patient
 	private String role;
 	private int age;
 	private String address;
-	private boolean isAproved;
+	private boolean isApproved;
 	private Date createdDate;
 	private Date lastUpdatedDate;
 	
 	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Appointment> appointments = new ArrayList<>();
-	
-	
 
 	public Patient() {
 		
 	}
 
-	public Patient(String username, String patientName, String phoneNo, String email, String password, String gender, String bloodGroup, String role, int age, String address, boolean isAproved, Date createdDate, Date lastUpdatedDate) {
+	public Patient(String username, String patientName, String phoneNo, String email, String password, String gender, String bloodGroup, String role, int age, String address, boolean isApproved, Date createdDate, Date lastUpdatedDate) {
 		this.username = username;
 		this.patientName = patientName;
 		this.phoneNo = phoneNo;
@@ -47,7 +45,7 @@ public class Patient
 		this.role = role;
 		this.age = age;
 		this.address = address;
-		this.isAproved = isAproved;
+		this.isApproved = isApproved;
 		this.createdDate = createdDate;
 		this.lastUpdatedDate = lastUpdatedDate;
 	}
@@ -132,12 +130,12 @@ public class Patient
 		this.address = address;
 	}
 
-	public boolean isAproved() {
-		return isAproved;
+	public boolean isApproved() {
+		return isApproved;
 	}
 
-	public void setAproved(boolean aproved) {
-		isAproved = aproved;
+	public void setApproved(boolean approved) {
+		isApproved = approved;
 	}
 
 	public Date getCreatedDate() {

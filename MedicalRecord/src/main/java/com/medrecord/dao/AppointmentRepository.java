@@ -7,7 +7,7 @@ import com.medrecord.Entity.Appointment;
 import java.util.List;
 
 
-public interface AppointmentRepositery extends JpaRepository<Appointment, Integer> {
+public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
 	Appointment findByAppointmentId(int appointmentId);
 	List<Appointment> findByDoctorUsername(String doctorUsername);
 }

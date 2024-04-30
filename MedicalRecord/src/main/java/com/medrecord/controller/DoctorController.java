@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.medrecord.Entity.Doctor;
 import com.medrecord.Service.DoctorServices;
-import com.medrecord.dao.DoctorRepositery;
+import com.medrecord.dao.DoctorRepository;
 import com.medrecord.requestdto.DoctorRegisterRequestDto;
 
 @RestController
@@ -31,7 +30,7 @@ public class DoctorController
 	DoctorServices doctorServices;
 	
 	@Autowired
-	DoctorRepositery doctorRepositery;
+	DoctorRepository doctorRepository;
 	
 //	@GetMapping("/login")
 //	public ResponseEntity<?> loginDoctor(@RequestParam String username,@RequestParam String password)

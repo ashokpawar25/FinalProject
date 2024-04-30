@@ -40,15 +40,6 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
-//	@PutMapping("/approveAppointment/{appointmentId}")
-//	public ResponseEntity<String> approveAppointment(@PathVariable ("appointmentId")int appointmentId)
-//	{
-//		ServiceResponse response = appointmentServices.approveAppointment(appointmentId);
-//		if(!response.status)
-//			return new ResponseEntity<String>(response.message,HttpStatus.NOT_FOUND);
-//		return ResponseEntity.ok(response.message);
-//	}
-
     @PutMapping("/updateAppointmentStatus/{appointmentId}")
     public ResponseEntity<String> updateAppointmentStatus(@PathVariable("appointmentId") int appointmentId, @RequestParam String status) {
         ServiceResponse response = appointmentServices.updateAppointmentStatus(appointmentId, status);

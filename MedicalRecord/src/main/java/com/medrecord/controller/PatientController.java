@@ -2,7 +2,7 @@ package com.medrecord.controller;
 
 import com.medrecord.Entity.Patient;
 import com.medrecord.Service.PatientServices;
-import com.medrecord.dao.PatientRepositery;
+import com.medrecord.dao.PatientRepository;
 import com.medrecord.requestdto.PatientRegisterRequestDto;
 import com.medrecord.requestdto.UpdatePatientRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class PatientController {
     PatientServices patientServices;
 
     @Autowired
-    PatientRepositery patientRepositery;
+    PatientRepository patientRepository;
 
     @PostMapping("/login")
     public ResponseEntity<?> loginPatient(@RequestParam String username, @RequestParam String password) {
@@ -28,7 +28,7 @@ public class PatientController {
             return new ResponseEntity<String>("Username And Password Are Required", HttpStatus.BAD_REQUEST);
         }
 
-        Patient existingPatient = patientRepositery.findByUsername(username);
+        Patient existingPatient = patientRepository.findByUsername(username);
 
         if (existingPatient == null || !existingPatient.getPassword().equals(password)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or passwords");

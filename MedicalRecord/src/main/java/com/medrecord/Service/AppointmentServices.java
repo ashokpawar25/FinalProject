@@ -1,6 +1,5 @@
 package com.medrecord.Service;
 
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +13,9 @@ import org.springframework.stereotype.Service;
 import com.medrecord.Entity.Appointment;
 import com.medrecord.Entity.Doctor;
 import com.medrecord.Entity.Patient;
-import com.medrecord.dao.AppointmentRepositery;
-import com.medrecord.dao.DoctorRepositery;
-import com.medrecord.dao.PatientRepositery;
+import com.medrecord.dao.AppointmentRepository;
+import com.medrecord.dao.DoctorRepository;
+import com.medrecord.dao.PatientRepository;
 import com.medrecord.requestdto.CreateAppointmentRequestDto;
 import com.medrecord.responsedto.ServiceResponse;
 
@@ -24,23 +23,23 @@ import com.medrecord.responsedto.ServiceResponse;
 public class AppointmentServices {
 	
 	@Autowired
-	PatientRepositery patientRepositery;
+	PatientRepository patientRepository;
 	
 	@Autowired
-	DoctorRepositery doctorRepositery;
+	DoctorRepository doctorRepository;
 	
 	@Autowired
-	AppointmentRepositery appointmentRepositery;
+	AppointmentRepository appointmentRepository;
 
 	public ServiceResponse addNewAppointment(CreateAppointmentRequestDto requestDto) 
 	{
-		Patient patient = patientRepositery.findByUsername(requestDto.patientUsername);
+		Patient patient = patientRepository.findByUsername(requestDto.patientUsername);
 		if(patient == null)
 		{
 			return new ServiceResponse(false,"Patient not found");
 		}
 		
-		Doctor doctor = doctorRepositery.findByUsername(requestDto.doctorUsername);
+		Doctor doctor = doctorRepository.findByUsername(requestDto.doctorUsername);
 		if (doctor == null)
 		{
 			return new ServiceResponse(false,"Doctor not found");
@@ -60,24 +59,24 @@ public class AppointmentServices {
 		appointment.setRequestedDate(LocalDate.now());
 		appointment.setLastUpdatedDate(LocalDate.now());
 		
-		appointmentRepositery.save(appointment);
+		appointmentRepository.save(appointment);
 		return new ServiceResponse(true,"Appointment submitted successfully");
 	}
 
 	public List<GetAllAppointmentResponseDto> getAllAppointments(Integer appointmentId, String doctorUsername, String patientUserName, String status) {
-		List<Appointment> appointments = appointmentRepositery.findAll();
+		List<Appointment> appointments = appointmentRepository.findAll();
 		if (appointmentId != null)
 		{
 			appointments = appointments.stream().filter(a -> a.getAppointmentId() == appointmentId).collect(Collectors.toList());
 		}
 		if(doctorUsername != null)
 		{
-			Doctor doctor = doctorRepositery.findByUsername(doctorUsername);
+			Doctor doctor = doctorRepository.findByUsername(doctorUsername);
 			appointments = appointments.stream().filter(a -> a.getDoctor() == doctor).collect(Collectors.toList());
 		}
 		if(patientUserName != null)
 		{
-			Patient patient = patientRepositery.findByUsername(patientUserName);
+			Patient patient = patientRepository.findByUsername(patientUserName);
 			appointments = appointments.stream().filter(a -> a.getPatient() == patient).collect(Collectors.toList());
 		}
 		if (status != null)
@@ -119,27 +118,27 @@ public class AppointmentServices {
 
 	public ServiceResponse updateAppointmentStatus(int appointmentId,String status)
 	{
-		Appointment appointment = appointmentRepositery.findByAppointmentId(appointmentId);
+		Appointment appointment = appointmentRepository.findByAppointmentId(appointmentId);
 		if(appointment == null)
 		{
 			return new ServiceResponse(false,"Appointment not found");
 		}
 		appointment.setStatus(status);
-		appointmentRepositery.save(appointment);
+		appointmentRepository.save(appointment);
 		return new ServiceResponse(true,"Appointment updated successfully");
 	}
 
 	public List<PatientListForDoctorResponseDto> getPatientList(String doctorUsername)
 	{
 		List<PatientListForDoctorResponseDto> patientList = new ArrayList<>();
-		List<Appointment> allAppointments = appointmentRepositery.findAll().stream()
+		List<Appointment> allAppointments = appointmentRepository.findAll().stream()
 				.filter(appointment -> appointment.getDoctor().getUsername().equalsIgnoreCase(doctorUsername)).toList();
 
 		for(Appointment appointment:allAppointments)
 		{
 			if(appointment.getStatus().equalsIgnoreCase("Approved"))
 			{
-				Patient patient = patientRepositery.findByUsername(appointment.getPatient().getUsername());
+				Patient patient = patientRepository.findByUsername(appointment.getPatient().getUsername());
 				if(patient != null)
 				{
 					PatientListForDoctorResponseDto dto = new PatientListForDoctorResponseDto();

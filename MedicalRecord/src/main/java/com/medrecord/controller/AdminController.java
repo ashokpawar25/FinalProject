@@ -1,13 +1,17 @@
 package com.medrecord.controller;
 
+import com.medrecord.Entity.ApproveRequest;
 import com.medrecord.Service.AdminService;
 import com.medrecord.responsedto.ServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class AdminController
@@ -15,21 +19,28 @@ public class AdminController
     @Autowired
     AdminService adminService;
 
-    @PutMapping("/approvePatient/{patientUsername}")
-    public ResponseEntity<String> approvePatient(@PathVariable("patientUsername")String patientUsername)
+    @GetMapping("/getApproveRequests")
+    public ResponseEntity<List<ApproveRequest>> getApproveRequests()
     {
-        ServiceResponse response = adminService.approvePatient(patientUsername);
-        if (response.status)
+        return ResponseEntity.ok(adminService.getApproveRequests());
+
+    }
+
+    @PutMapping("/approveRequest/{requestId}")
+    public ResponseEntity<String> approveRequest(@PathVariable("requestId")int requestId)
+    {
+        ServiceResponse response = adminService.approveRequest(requestId);
+        if(response.status)
             return ResponseEntity.ok(response.message);
 
         return new ResponseEntity<>(response.message,HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/rejectPatient/{patientUsername}")
-    public ResponseEntity<String> rejectPatient(@PathVariable("patientUsername")String patientUsername)
+    @PutMapping("/rejectRequest/{requestId}")
+    public ResponseEntity<String> rejectRequest(@PathVariable("requestId")int requestId)
     {
-        ServiceResponse response = adminService.rejectPatient(patientUsername);
-        if (response.status)
+        ServiceResponse response = adminService.rejectRequest(requestId);
+        if(response.status)
             return ResponseEntity.ok(response.message);
 
         return new ResponseEntity<>(response.message,HttpStatus.NOT_FOUND);
