@@ -11,5 +11,5 @@ public class UpdateDoctorRequestDto
     public String address;
     public String specialization;
     public String licenseNumber;
-    public String password;
+//    public String password;
 }
