@@ -9,14 +9,12 @@ import com.medrecord.dao.PatientRepository;
 import com.medrecord.responsedto.ServiceResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class AdminService
 {
-
     @Autowired
     PatientRepository patientRepository;
 
@@ -48,8 +46,9 @@ public class AdminService
             if(request1.getRole().equalsIgnoreCase("doctor"))
             {
                 Doctor doctor = doctorRepository.findByUsername(request1.getUsername());
-//                doctor.setApproved(true);
-//                doctorRepository.save(doctor);
+                doctor.setApproved(true);
+                doctorRepository.save(doctor);
+                approveRequestRepository.deleteById(request1.getId());
                 return new ServiceResponse(true,"User request approved successfully");
             }
         }
@@ -72,34 +71,11 @@ public class AdminService
             if(request1.getRole().equalsIgnoreCase("doctor"))
             {
                 Doctor doctor = doctorRepository.findByUsername(request1.getUsername());
-//                doctor.setApproved(true);
-//                doctorRepository.save(doctor);
+                doctorRepository.delete(doctor);
                 approveRequestRepository.deleteById(request1.getId());
                 return new ServiceResponse(true,"User request rejected successfully");
             }
         }
         return new ServiceResponse(false,"request Not Found");
     }
-
-
-//    public ServiceResponse approveDoctor(String doctorUsername)
-//    {
-//        Doctor doctor = doctorRepositery.findByUsername(doctorUsername);
-//        if (doctor == null)
-//            return new ServiceResponse(false,"Doctor Not Found");
-//
-//        doctor.(true);
-//        patientRepositery.save(patient);
-//        return new ServiceResponse(true,"Patient request approved successfully");
-//    }
-//
-//    public ServiceResponse rejectDoctor(String patientUsername)
-//    {
-//        Patient patient = patientRepositery.findByUsername(patientUsername);
-//        if (patient == null)
-//            return new ServiceResponse(false,"Patient Not Found");
-//
-//        patientRepositery.delete(patient);
-//        return new ServiceResponse(true,"Patient request rejected successfully");
-//    }
 }

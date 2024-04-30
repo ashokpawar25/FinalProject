@@ -29,9 +29,6 @@ public class DoctorController
 	@Autowired
 	DoctorServices doctorServices;
 	
-	@Autowired
-	DoctorRepository doctorRepository;
-	
 //	@GetMapping("/login")
 //	public ResponseEntity<?> loginDoctor(@RequestParam String username,@RequestParam String password)
 //	{

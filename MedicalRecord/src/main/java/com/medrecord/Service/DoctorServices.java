@@ -49,6 +49,7 @@ public class DoctorServices
 		doctor.setSpecialization(requestDto.specialization);
 		doctor.setUsername(requestDto.username);
 		doctor.setRole("doctor");
+		doctor.setApproved(false);
 		doctor.setCreatedDate(new Date(System.currentTimeMillis()));
 		doctor.setLastUpdatedDate(new Date(System.currentTimeMillis()));
 		

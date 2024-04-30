@@ -24,30 +24,30 @@ public class Doctor {
     private String specialization;
     private String licenseNumber;
     private String password;
+    private boolean isApproved;
     private Date createdDate;
     private Date lastUpdatedDate;
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Appointment> appointments = new ArrayList<>();
 
-    public Doctor(String username, String role, String firstName, String lastName, String email, String mobile, int age, String gender,
-                  String address, String specialization, String licenseNumber, String password, Date createdDate,
-                  Date lastUpdatedDate) {
-        super();
+    public Doctor(String username, String firstName, String lastName, String email, String mobile, String role, int age, String gender, String address, String specialization, String licenseNumber, String password, boolean isApproved, Date createdDate, Date lastUpdatedDate, List<Appointment> appointments) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.mobile = mobile;
+        this.role = role;
         this.age = age;
         this.gender = gender;
         this.address = address;
         this.specialization = specialization;
         this.licenseNumber = licenseNumber;
         this.password = password;
+        this.isApproved = isApproved;
         this.createdDate = createdDate;
         this.lastUpdatedDate = lastUpdatedDate;
-        this.role = role;
+        this.appointments = appointments;
     }
 
     public Doctor() {
@@ -166,5 +166,19 @@ public class Doctor {
         this.role = role;
     }
 
+    public boolean isApproved() {
+        return isApproved;
+    }
 
+    public void setApproved(boolean approved) {
+        isApproved = approved;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
+    }
 }
