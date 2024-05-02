@@ -14,5 +14,5 @@ public class CreateUpdateEntryRequestDto {
     public String healthGoals;
     public String notes;
     public String doctorUsername;
-    public int healthRecordId;
+    public String patientUsername;
 }

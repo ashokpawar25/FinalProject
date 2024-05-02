@@ -30,6 +30,9 @@ public class Patient
 	@OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
 	private HealthRecord healthRecord ;
 
+	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+	private List<PhrRequest> phrRequest = new ArrayList<>();
+
 	public Patient() {
 		
 	}

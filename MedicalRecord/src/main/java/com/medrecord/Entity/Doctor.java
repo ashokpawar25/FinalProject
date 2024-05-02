@@ -31,6 +31,9 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Appointment> appointments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    private List<PhrRequest> phrRequests = new ArrayList<>();
+
     public Doctor(String username, String firstName, String lastName, String email, String mobile, String role, int age, String gender, String address, String specialization, String licenseNumber, String password, boolean isApproved, Date createdDate, Date lastUpdatedDate, List<Appointment> appointments) {
         this.username = username;
         this.firstName = firstName;
