@@ -1,9 +1,6 @@
 package com.medrecord.Entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -29,6 +26,9 @@ public class Patient
 	
 	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Appointment> appointments = new ArrayList<>();
+
+	@OneToOne(mappedBy = "patient", cascade = CascadeType.ALL)
+	private HealthRecord healthRecord ;
 
 	public Patient() {
 		

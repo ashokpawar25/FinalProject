@@ -25,8 +25,7 @@ public class PatientServices
 	
 	public List<Patient> getPatients()
 	{
-		List<Patient> allPatients = patientRepository.findAll();
-		return allPatients;
+        return patientRepository.findAll();
 	}
 	
 	public String registerPatient(PatientRegisterRequestDto requestDto)
@@ -96,6 +95,6 @@ public class PatientServices
 		}
 		
 		patientRepository.delete(existingPatient);
-		return "Patient deleted succesfully";
+		return "Patient deleted successfully";
 	}
 }
